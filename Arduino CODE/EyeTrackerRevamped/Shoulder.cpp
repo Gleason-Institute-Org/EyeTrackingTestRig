@@ -49,7 +49,7 @@ void Shoulder::init()
   this->gBS = KinematicChain::xform(0, 0, 0, (0.14123), 0.562, (0.23123));
   this->gBC = KinematicChain::xform(0, 0, 0, 0, 0, 0);
 
-  this->gCS = gBC.Inverse() * gBS;
+  this->gCS = InvNonSingular(gBC) * gBS;
 }
 
 /*
@@ -130,6 +130,17 @@ void Shoulder::updateShoulderPosition()
       from zero position, we invert the sign of y.
   */
   this->gBC = KinematicChain::xform(0, 0, 0, (this->GetShoulderPosition('x')), -(this->GetShoulderPosition('y')), (this->GetShoulderPosition('z')));
+
+  Serial.println("gBC");
+  for (int i =0; i< 4; i++)
+  {
+    for (int j = 0; j<4; j++)
+    {
+      Serial.print(this->gBC(i,j));
+      Serial.print(" ");
+    }
+    Serial.println();
+  }
 }
 
 /*
@@ -183,9 +194,14 @@ void Shoulder::MoveShoulderToPosition(float x, float y, float z)
  * Gets the inverse transformation matrix that goes from the center of the z axis stepper stage
  * to the center of the screen.
  */
+ 
 BLA::Matrix<4,4> Shoulder::GetInverseShoulderTransformation()
 {
-  this->gCS = gBC.Inverse() * gBS;
+//  BLA::Matrix<4, 4> gBCinv = gBC;
+//  Invert(gBCinv);
+//  this->gCS = gBCinv * gBS;
+//  old code, leave this to explain to carsten
+  this-> gCS = InvNonSingular(gBC) * gBS;
   return this->gCS;
 }
 

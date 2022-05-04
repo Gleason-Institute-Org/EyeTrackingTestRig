@@ -7,11 +7,12 @@
 #ifndef _FUNCTION_H
 #define _FUNCTION_H
 
+//row below was commented out causing issues with the XBOXONE and USB variables
 #include <XBOXONE.h>
 // Including the libraries for the IMU - acclerometer
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BNO055.h>
-#include <utility/imumaths.h>
+//#include <Adafruit_Sensor.h>
+//#include <Adafruit_BNO055.h>
+//#include <utility/imumaths.h>
 
 // Including library for the matrix elements in the code
 #include <BasicLinearAlgebra.h>
@@ -47,7 +48,7 @@ enum PromAddress {
 // in the source file for this header.
 
 // BNO IMU object
-extern Adafruit_BNO055 bno;
+//extern Adafruit_BNO055 bno;
 
 // Hardware Serial object for comms with API
 // Hardware Serial is just a pointer to Serial1.
@@ -93,5 +94,9 @@ extern int backLeftDir;
 extern int backLeftPulse; //50 on PCB;
 // Declaring neck servo pins
 extern int neckServoPin;
+
+//Used to invert a matrix. We assume that the matrix is always going to be non singular. actual function in function.cpp
+BLA::Matrix<4,4> InvNonSingular(BLA::Matrix<4,4> in);
+
 
 #endif
